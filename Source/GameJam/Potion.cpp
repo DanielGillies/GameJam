@@ -25,6 +25,11 @@ void APotion::BeginPlay()
 	// Setup pickup handler
 	Sprite->OnComponentBeginOverlap.AddDynamic(this, &APotion::OnOverlapBegin);
 
+	if (PossibleAbilities.Num() < 1 || PossibleEffects.Num() < 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Make sure you populate the potion's possible abilities and possible effects!"));
+	}
+
 }
 
 // Called every frame
