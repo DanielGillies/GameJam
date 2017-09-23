@@ -52,14 +52,17 @@ TSubclassOf<UPotionGameplayAbility> APotion::SelectRandomAbility()
 {
 	int32 index = FMath::RandRange(0, PossibleAbilities.Num() - 1);
 	//PossibleAbilities[index]
-	UPotionGameplayAbility* Ability = Cast<UPotionGameplayAbility>(PossibleAbilities[index]);
+	UPotionGameplayAbility* Ability = Cast<UPotionGameplayAbility>(PossibleAbilities[index]->GetDefaultObject());
 	if (Ability)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("LOLOLOL"));
+		UGameplayEffect* Effect = Cast<UGameplayEffect>(SelectRandomEffect().GetDefaultObject());
+		if (Effect)
+		{
+			Ability->EffectFromPotion = Effect;
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *Ability->EffectFromPotion->GetName());
+		}
 	}
-	/*UGameplayEffect* Effect = Cast<UGameplayEffect>(SelectRandomEffect());
-	Ability->SetEffectFromPotion(Effect);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Ability->GetEffectFromPotion()->GetName());*/
+	
 	return PossibleAbilities[index];
 }
 
