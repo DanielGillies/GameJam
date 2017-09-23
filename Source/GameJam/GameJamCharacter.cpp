@@ -92,9 +92,9 @@ void AGameJamCharacter::BeginPlay()
 	{
 		if (HasAuthority())
 		{
-			for (int i = 0; i < AbilitySet.Num(); i++)
+			for (int i = 0; i < AbilityArray.Num(); i++)
 			{
-				TSubclassOf<UGameplayAbility> Ability = AbilitySet[i];
+				TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
 			}
 		}
