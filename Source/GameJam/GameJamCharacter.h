@@ -97,13 +97,15 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
-	TArray < TSubclassOf <class UGameplayAbility>> AbilityArray;
+	TArray <class UPotionGameplayAbility*> AbilityArray;
 
 	UFUNCTION(BlueprintCallable)
 	void AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "DmgSystem")
 	void OnDeath();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Firing")
+	void Fire();
 };

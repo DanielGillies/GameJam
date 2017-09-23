@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Core.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
@@ -23,6 +23,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UPROPERTY(VisibleDefaultsOnly, Category = "Collision")
+	class USphereComponent* CollisionComp;
+
+	UFUNCTION(BlueprintCallable, Category = "Fire")
+	void LaunchProjectile();
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	class UProjectileMovementComponent* MovementComp;
 	
 };

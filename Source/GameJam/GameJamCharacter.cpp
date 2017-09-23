@@ -84,9 +84,9 @@ AGameJamCharacter::AGameJamCharacter()
 
 void AGameJamCharacter::AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability)
 {
-	int32 AbilityIndex = AbilityArray.Add(Ability);
+	/*int32 AbilityIndex = AbilityArray.Add(Ability);
 	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, AbilityIndex));
-	AbilitySystem->InitAbilityActorInfo(this, this);
+	AbilitySystem->InitAbilityActorInfo(this, this);*/
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -101,8 +101,8 @@ void AGameJamCharacter::BeginPlay()
 		{
 			for (int i = 0; i < AbilityArray.Num(); i++)
 			{
-				TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
-				AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
+				//TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
+				//AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
 			}
 		}
 		/*
@@ -145,6 +145,8 @@ void AGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AGameJamCharacter::Fire);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGameJamCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGameJamCharacter::TouchStopped);
