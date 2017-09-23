@@ -92,7 +92,7 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
-	class UGameplayAbilitySet* AbilitySet;
+	TArray < TSubclassOf <class UGameplayAbility>> AbilitySet;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
 	class UDataTable * AttrDataTable;

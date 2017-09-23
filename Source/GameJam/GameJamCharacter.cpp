@@ -89,12 +89,21 @@ void AGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	if (AbilitySystem)
-	{/*
+	{
+		if (HasAuthority())
+		{
+			for (int i = 0; i < AbilitySet.Num(); i++)
+			{
+				TSubclassOf<UGameplayAbility> Ability = AbilitySet[i];
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
+			}
+		}
+		/*
 		if (HasAuthority() && Ability)
 		{
 			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
-		}
-		AbilitySystem->InitAbilityActorInfo(this, this);*/
+		}*/
+		AbilitySystem->InitAbilityActorInfo(this, this);
 
 		if (AttrDataTable)
 		{
