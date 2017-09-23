@@ -22,9 +22,6 @@ void APotion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Setup pickup handler
-	Sprite->OnComponentBeginOverlap.AddDynamic(this, &APotion::OnOverlapBegin);
-
 	if (PossibleAbilities.Num() < 1 || PossibleEffects.Num() < 1)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Make sure you populate the potion's possible abilities and possible effects!"));
@@ -37,20 +34,6 @@ void APotion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void APotion::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if ((OtherActor != nullptr) && (OtherActor != this))
-	{
-		if (OtherActor->ActorHasTag(FName("Character.Hero")))
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *SelectRandomAbility()->StaticClass()->GetName());
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *SelectRandomEffect()->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("------"));
-			//UE_LOG(LogTemp, Warning, TEXT("LOLOLOL"));
-		}
-	}
 }
 
 UPotionGameplayAbility* APotion::SelectRandomAbility()
