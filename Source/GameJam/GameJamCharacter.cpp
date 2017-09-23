@@ -89,8 +89,7 @@ void AGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	if (AbilitySystem)
-	{
-		/*
+	{/*
 		if (HasAuthority() && Ability)
 		{
 			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
