@@ -14,7 +14,7 @@ APotion::APotion()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
-	Sprite->AttachTo(RootComponent);
+	Sprite->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
