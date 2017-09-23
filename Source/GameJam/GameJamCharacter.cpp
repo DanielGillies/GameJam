@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "AbilitySystemComponent.h"
 #include "AlchemyAttributeSet.h"
+#include "PotionGameplayAbility.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -82,10 +83,14 @@ AGameJamCharacter::AGameJamCharacter()
 
 }
 
-void AGameJamCharacter::AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability)
+void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 {
-	/*int32 AbilityIndex = AbilityArray.Add(Ability);
-	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, AbilityIndex));
+	int32 AbilityIndex = UsableAbilities.Add(Ability);
+	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex));
+	AbilitySystem->InitAbilityActorInfo(this, this);
+	/*int32 AbilityIndex = UsableAbilities.Add(Ability);
+	UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Cast<UGameplayAbility>(Ability), FName("Ability"));
+	AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, AbilityIndex));
 	AbilitySystem->InitAbilityActorInfo(this, this);*/
 }
 
@@ -101,8 +106,9 @@ void AGameJamCharacter::BeginPlay()
 		{
 			for (int i = 0; i < AbilityArray.Num(); i++)
 			{
-				//TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
-				//AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
+				TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
+				UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Ability, FName("Ability"));
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, i));
 			}
 		}
 		/*

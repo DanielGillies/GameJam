@@ -40,12 +40,12 @@ UPotionGameplayAbility* APotion::SelectRandomAbility()
 {
 	int32 index = FMath::RandRange(0, PossibleAbilities.Num() - 1);
 	//PossibleAbilities[index]
-	UGameplayAbility* test = Cast<UGameplayAbility>(PossibleAbilities[index]);
-	UPotionGameplayAbility* Ability = Cast<UPotionGameplayAbility>(test);
-
+	UPotionGameplayAbility* Ability = NewObject<UPotionGameplayAbility>(GetTransientPackage(), PossibleAbilities[index], FName("Ability"));
+	//UPotionGameplayAbility* Ability = Cast<UPotionGameplayAbility>(PossibleAbilities[index]->GetDefaultObject());
 	if (Ability)
 	{
-		UGameplayEffect* Effect = Cast<UGameplayEffect>(SelectRandomEffect().GetDefaultObject());
+		UGameplayEffect* Effect = NewObject<UGameplayEffect>(GetTransientPackage(), SelectRandomEffect());
+		//UGameplayEffect* Effect = Cast<UGameplayEffect>(SelectRandomEffect().GetDefaultObject());
 		if (Effect)
 		{
 			Ability->EffectFromPotion = Effect;
