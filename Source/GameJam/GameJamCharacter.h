@@ -35,8 +35,9 @@ enum class AbilityInput : uint8
 };
 
 UCLASS(config=Game)
-class AGameJamCharacter : public APaperCharacter
+class AGameJamCharacter : public APaperCharacter, public IAbilitySystemInterface
 {
+
 	GENERATED_BODY()
 
 	/** Side view camera */
@@ -55,6 +56,12 @@ class AGameJamCharacter : public APaperCharacter
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay();
+
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override //We add this function, overriding it from IAbilitySystemInterface.
+	{
+		return AbilitySystem;
+	};
+
 protected:
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
