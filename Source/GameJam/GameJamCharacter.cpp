@@ -78,6 +78,7 @@ AGameJamCharacter::AGameJamCharacter()
 	// Enable replication on the Sprite component so animations show up when networked
 	GetSprite()->SetIsReplicated(true);
 	bReplicates = true;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
