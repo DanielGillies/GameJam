@@ -29,5 +29,14 @@ public:
 	
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PotionConfig)
+	TArray< TSubclassOf<class UPotionGameplayAbility> > PossibleAbilities;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PotionConfig)
+	TArray< TSubclassOf<class UGameplayEffect> > PossibleEffects;
+
+	TSubclassOf<class UPotionGameplayAbility> SelectRandomAbility();
+
+	TSubclassOf<class UGameplayEffect> SelectRandomEffect();
 };
