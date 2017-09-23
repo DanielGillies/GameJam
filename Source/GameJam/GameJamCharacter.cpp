@@ -82,6 +82,13 @@ AGameJamCharacter::AGameJamCharacter()
 
 }
 
+void AGameJamCharacter::AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability)
+{
+	int32 AbilityIndex = AbilityArray.Add(Ability);
+	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, AbilityIndex));
+	AbilitySystem->InitAbilityActorInfo(this, this);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Animation
 

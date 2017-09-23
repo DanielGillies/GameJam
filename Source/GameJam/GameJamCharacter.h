@@ -96,4 +96,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
 	class UDataTable * AttrDataTable;
+
+	UFUNCTION(BlueprintCallable)
+	void AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability);
 };
