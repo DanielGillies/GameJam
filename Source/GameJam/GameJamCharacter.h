@@ -103,4 +103,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddAbilityToArray(TSubclassOf<class UGameplayAbility> Ability);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "DmgSystem")
+	void OnDeath();
 };

@@ -19,14 +19,14 @@ public:
 	UPROPERTY(Category = "Character Attributes | Health", EditAnywhere, BlueprintReadWrite)
 	float Health;
 
-	UPROPERTY(Category = "Character Attributes | MaxHealth", EditAnywhere, BlueprintReadWrite)
-	float MaxHealth;
-
 	UPROPERTY(Category = "Character Attributes | MoveSpeed", EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
 
 	UPROPERTY(Category = "Character Attributes | Damage", EditAnywhere, BlueprintReadWrite)
 	float Damage;
 	
+	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data) override;
+
+	static FGameplayAttribute HealthAttribute();
 	
 };
