@@ -83,6 +83,19 @@ AGameJamCharacter::AGameJamCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
+void AGameJamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	if (AbilitySystem)
+	{
+		if (HasAuthority() && Ability)
+		{
+			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
+		}
+		AbilitySystem->InitAbilityActorInfo(this, this);
+	}
+}
+
 void AGameJamCharacter::UpdateAnimation()
 {
 	const FVector PlayerVelocity = GetVelocity();
