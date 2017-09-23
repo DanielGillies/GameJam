@@ -111,11 +111,6 @@ void AGameJamCharacter::BeginPlay()
 			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
 		}*/
 		AbilitySystem->InitAbilityActorInfo(this, this);
-
-		if (AttrDataTable)
-		{
-			const UAttributeSet * Attrs = AbilitySystem->InitStats(UAlchemyAttributeSet::StaticClass(), AttrDataTable);
-		}
 	}
 
 }
