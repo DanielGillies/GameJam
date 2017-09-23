@@ -36,7 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PotionConfig)
 	TArray< TSubclassOf<class UGameplayEffect> > PossibleEffects;
 
-	TSubclassOf<class UPotionGameplayAbility> SelectRandomAbility();
+	UFUNCTION(BlueprintCallable)
+	UPotionGameplayAbility* SelectRandomAbility();
 
+	UFUNCTION(BlueprintCallable)
 	TSubclassOf<class UGameplayEffect> SelectRandomEffect();
 };

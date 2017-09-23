@@ -40,7 +40,7 @@ void APotion::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	{
 		if (OtherActor->ActorHasTag(FName("Character.Hero")))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *SelectRandomAbility()->StaticClass()->GetName());
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *SelectRandomAbility()->StaticClass()->GetName());
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *SelectRandomEffect()->GetName());
 			UE_LOG(LogTemp, Warning, TEXT("------"));
 			//UE_LOG(LogTemp, Warning, TEXT("LOLOLOL"));
@@ -48,7 +48,7 @@ void APotion::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	}
 }
 
-TSubclassOf<UPotionGameplayAbility> APotion::SelectRandomAbility()
+UPotionGameplayAbility* APotion::SelectRandomAbility()
 {
 	int32 index = FMath::RandRange(0, PossibleAbilities.Num() - 1);
 	//PossibleAbilities[index]
@@ -63,7 +63,7 @@ TSubclassOf<UPotionGameplayAbility> APotion::SelectRandomAbility()
 		}
 	}
 	
-	return PossibleAbilities[index];
+	return Ability;
 }
 
 TSubclassOf<class UGameplayEffect> APotion::SelectRandomEffect()
