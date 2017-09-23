@@ -10,6 +10,7 @@
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
 #include "AbilitySystemComponent.h"
+#include "AlchemyAttributeSet.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -88,13 +89,19 @@ void AGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	if (AbilitySystem)
-	{
+	{/*
 		if (HasAuthority() && Ability)
 		{
 			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
 		}
-		AbilitySystem->InitAbilityActorInfo(this, this);
+		AbilitySystem->InitAbilityActorInfo(this, this);*/
+
+		if (AttrDataTable)
+		{
+			const UAttributeSet * Attrs = AbilitySystem->InitStats(UAlchemyAttributeSet::StaticClass(), AttrDataTable);
+		}
 	}
+
 }
 
 void AGameJamCharacter::UpdateAnimation()
