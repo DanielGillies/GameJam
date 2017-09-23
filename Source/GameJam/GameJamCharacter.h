@@ -93,4 +93,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
 	TSubclassOf<class UGameplayAbility> Ability;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
+	class UDataTable * AttrDataTable;
 };
