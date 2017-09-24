@@ -116,6 +116,19 @@ void AGameJamCharacter::ChangeMoveSpeed(float Speed)
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
 }
 
+FVector2D AGameJamCharacter::GetRelativeLocationToPosition(FVector CheckAgainst)
+{
+	FVector MyLocation = GetActorLocation();
+	FVector OtherLocation = CheckAgainst;
+
+	FVector2D MyLocation2D = FVector2D(MyLocation.X, MyLocation.Z);
+	FVector2D OtherLocation2D = FVector2D(OtherLocation.X, OtherLocation.Z);
+
+	FVector2D RelativeLocation = OtherLocation2D - MyLocation2D;
+
+	return RelativeLocation;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Animation
 

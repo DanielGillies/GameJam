@@ -127,4 +127,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void ChangeMoveSpeed(float Speed);
+
+	UFUNCTION(BlueprintCallable, Category = "Helper")
+	FVector2D GetRelativeLocationToPosition(FVector CheckAgainst);
 };
