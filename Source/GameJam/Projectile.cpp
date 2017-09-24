@@ -38,7 +38,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::LaunchProjectile(FVector Direciton)
 {
-	FVector velocity = FVector(5, 0, 0) * MovementComp->InitialSpeed;
+	FVector velocity = Direciton * MovementComp->InitialSpeed;
 	MovementComp->Activate();
 }
 
