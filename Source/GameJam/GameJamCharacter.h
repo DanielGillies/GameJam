@@ -121,4 +121,10 @@ public:
 	void UnlockAnimationSwitching();
 
 	bool LockAnimationSwitching = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MoveSpeed = 500.f;
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void ChangeMoveSpeed(float Speed);
 };

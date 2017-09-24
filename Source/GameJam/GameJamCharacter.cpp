@@ -60,7 +60,7 @@ AGameJamCharacter::AGameJamCharacter()
 	GetCharacterMovement()->AirControl = 0.80f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.0f;
-	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->MaxFlySpeed = 600.0f;
 
 	// Lock character motion onto the XZ plane, so the character can't move in or out of the screen
@@ -111,12 +111,18 @@ void AGameJamCharacter::UnlockAnimationSwitching()
 	LockAnimationSwitching = false;
 }
 
+void AGameJamCharacter::ChangeMoveSpeed(float Speed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
 void AGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	if (AbilitySystem)
 	{
 		if (HasAuthority())
