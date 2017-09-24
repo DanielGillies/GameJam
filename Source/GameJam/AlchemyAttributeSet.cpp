@@ -9,9 +9,7 @@
 
 void UAlchemyAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data)
 {
-
 	UAbilitySystemComponent* Source = Data.EffectSpec.GetContext().GetOriginalInstigatorAbilitySystemComponent();
-
 
 	if (HealthAttribute() == Data.EvaluatedData.Attribute)
 	{
@@ -23,7 +21,7 @@ void UAlchemyAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffec
 			DamagedActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 			DamagedController = Data.Target.AbilityActorInfo->PlayerController.Get();
 		}
-
+		Health = FMath::Clamp(Health, 0.0f, MaxHealth);
 		if (Health <= 0)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("DEAD FUCKER"));

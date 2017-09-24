@@ -17,9 +17,7 @@ AProjectile::AProjectile()
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"), TEXT("ProjectileComp"));
 	MovementComp->UpdatedComponent = CollisionComp;
-
-	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(FName("Sprite Component"), TEXT("SpriteComp"));
-	Sprite->AttachToComponent(CollisionComp, FAttachmentTransformRules::KeepRelativeTransform);
+	MovementComp->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -39,6 +37,7 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::LaunchProjectile(FVector Direciton)
 {
 	FVector velocity = Direciton * MovementComp->InitialSpeed;
+	MovementComp->Velocity = velocity;
 	MovementComp->Activate();
 }
 

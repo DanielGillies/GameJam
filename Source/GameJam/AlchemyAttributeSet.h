@@ -24,6 +24,9 @@ public:
 
 	UPROPERTY(Category = "Character Attributes | Damage", EditAnywhere, BlueprintReadWrite)
 	float Damage;
+
+	UPROPERTY(Category = "Character Attributes | MaxHealth", EditAnywhere, BlueprintReadWrite)
+	float MaxHealth;
 	
 	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data) override;
 
