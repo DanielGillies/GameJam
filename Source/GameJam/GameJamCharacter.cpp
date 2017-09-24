@@ -104,13 +104,60 @@ AGASCharacter::AGASCharacter(const FObjectInitializer& ObjectInitializer)
 
 void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 {
-	int32 AbilityIndex = AbilityArray.Add(Ability);
+	int32 AbilityIndex = -1;
+	for (int i = 0; i < AbilityArray.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("---%s---"), *AbilityArray[i]->GetName());
+		if (!AbilityArray[i])
+		{
+			AbilityIndex = i;
+			break;
+		}
+	}
+	if (AbilityIndex != -1)
+	{
+		AbilityArray.Insert(Ability, AbilityIndex);
+	}
+	else
+	{
+		AbilityIndex = AbilityArray.Add(Ability);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Added ability %d"), AbilityIndex+1);
+	//AbilityArray.insert
 	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex + StartingAbilities.Num()));
-	AbilitySystem->InitAbilityActorInfo(this, this);
 	/*int32 AbilityIndex = UsableAbilities.Add(Ability);
 	UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Cast<UGameplayAbility>(Ability), FName("Ability"));
 	AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, AbilityIndex));
 	AbilitySystem->InitAbilityActorInfo(this, this);*/
+}
+
+void AGameJamCharacter::RemoveAbilityFromArray(UPotionGameplayAbility* Ability)
+{
+	int32 AbilityIndex = -1;
+	for (int i = 0; i < AbilityArray.Num(); i++)
+	{
+		if (AbilityArray[i] == Ability)
+		{
+			AbilityIndex = i;
+			break;
+		}
+	}
+	if (AbilityIndex != -1)
+	{
+		AbilityArray.RemoveAt(AbilityIndex);
+		AbilitySystem->ClearAbility(Ability->GetCurrentAbilitySpecHandle());
+		UE_LOG(LogTemp, Warning, TEXT("Removed ability %d"), AbilityIndex+1);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Could not find the ability you wanted to remove."));
+	}
+}
+
+void AGameJamCharacter::RemoveRandomAbility()
+{
+	int32 index = FMath::RandRange(0, AbilityArray.Num()-1);
+	RemoveAbilityFromArray(AbilityArray[index]);
 }
 
 void AGameJamCharacter::PlayAttackAnimation()
@@ -209,6 +256,9 @@ void AGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("TestInput", IE_Released, this, &AGameJamCharacter::RemoveRandomAbility);
+
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamCharacter::MoveRight);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGameJamCharacter::TouchStarted);
