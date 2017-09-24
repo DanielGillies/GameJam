@@ -119,6 +119,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddAbilityToArray(UPotionGameplayAbility* Ability);
 
+	UFUNCTION(BlueprintCallable)
+	void RemoveAbilityFromArray(UPotionGameplayAbility* Ability);
+
+	void RemoveRandomAbility();
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "DmgSystem")
 	void OnDeath();
 
