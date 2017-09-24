@@ -85,7 +85,7 @@ AGameJamCharacter::AGameJamCharacter()
 
 void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 {
-	int32 AbilityIndex = UsableAbilities.Add(Ability);
+	int32 AbilityIndex = AbilityArray.Add(Ability);
 	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex));
 	AbilitySystem->InitAbilityActorInfo(this, this);
 	/*int32 AbilityIndex = UsableAbilities.Add(Ability);
@@ -106,7 +106,7 @@ void AGameJamCharacter::BeginPlay()
 		{
 			for (int i = 0; i < AbilityArray.Num(); i++)
 			{
-				TSubclassOf<UGameplayAbility> Ability = AbilityArray[i];
+				TSubclassOf<UGameplayAbility> Ability = StartingAbilities[i];
 				UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Ability, FName("Ability"));
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, i));
 			}
