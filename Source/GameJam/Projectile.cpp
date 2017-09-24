@@ -16,7 +16,9 @@ AProjectile::AProjectile()
 	RootComponent = CollisionComp;
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"), TEXT("ProjectileComp"));
-	MovementComp->UpdatedComponent = CollisionComp;
+	MovementComp->UpdatedComponent = RootComponent;
+	MovementComp->InitialSpeed = 2500.f;
+	MovementComp->MaxSpeed = 10000.0f;
 	MovementComp->bAutoActivate = false;
 }
 
@@ -36,8 +38,8 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::LaunchProjectile(FVector Direciton)
 {
-	FVector velocity = Direciton * MovementComp->InitialSpeed;
-	MovementComp->Velocity = velocity;
+	FVector Velocity = Direciton * MovementComp->InitialSpeed;
+	MovementComp->Velocity = Velocity;
 	MovementComp->Activate();
 }
 

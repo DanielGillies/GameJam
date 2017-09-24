@@ -29,8 +29,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Fire")
 	void LaunchProjectile(FVector Direciton);
 
-private:
-	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	class UProjectileMovementComponent* MovementComp;
-	
 };

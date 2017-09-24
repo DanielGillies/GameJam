@@ -12,6 +12,7 @@
 #include "AbilitySystemComponent.h"
 #include "AlchemyAttributeSet.h"
 #include "PotionGameplayAbility.h"
+#include "TimerManager.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -94,6 +95,22 @@ void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 	AbilitySystem->InitAbilityActorInfo(this, this);*/
 }
 
+void AGameJamCharacter::SetupFire()
+{
+	FTimerHandle AnimationLockHandle;
+	LockAnimationSwitching = true;
+	UPaperFlipbook* DesiredAnimation = AttackAnimation;
+	GetSprite()->SetFlipbook(DesiredAnimation);
+	
+	GetWorldTimerManager().SetTimer(AnimationLockHandle, this, &AGameJamCharacter::UnlockAnimationSwitching, GetSprite()->GetFlipbookLength());
+	Fire();
+}
+
+void AGameJamCharacter::UnlockAnimationSwitching()
+{
+	LockAnimationSwitching = false;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
@@ -152,7 +169,7 @@ void AGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AGameJamCharacter::Fire);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AGameJamCharacter::SetupFire);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGameJamCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGameJamCharacter::TouchStopped);
@@ -183,7 +200,10 @@ void AGameJamCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const 
 void AGameJamCharacter::UpdateCharacter()
 {
 	// Update animation to match the motion
-	UpdateAnimation();
+	if (!LockAnimationSwitching)
+	{
+		UpdateAnimation();
+	}
 
 	// Now setup the rotation of the controller based on the direction we are travelling
 	const FVector PlayerVelocity = GetVelocity();	

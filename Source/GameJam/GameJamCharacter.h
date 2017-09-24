@@ -71,6 +71,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* IdleAnimation;
 
+	// The animation to play while attacking
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* AttackAnimation;
+
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
@@ -109,6 +113,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "DmgSystem")
 	void OnDeath();
 
+	void SetupFire();
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Firing")
 	void Fire();
+
+	void UnlockAnimationSwitching();
+
+	bool LockAnimationSwitching = false;
 };
