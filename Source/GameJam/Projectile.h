@@ -27,7 +27,10 @@ public:
 	class USphereComponent* CollisionComp;
 
 	UFUNCTION(BlueprintCallable, Category = "Fire")
-	void LaunchProjectile();
+	void LaunchProjectile(FVector Direciton);
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Sprite")
+	class UPaperSpriteComponent* Sprite;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Movement")
