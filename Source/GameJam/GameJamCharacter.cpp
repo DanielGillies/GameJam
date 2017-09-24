@@ -11,16 +11,28 @@
 #include "Camera/CameraComponent.h"
 #include "AbilitySystemComponent.h"
 #include "AlchemyAttributeSet.h"
+#include "AlchemyMovementComponent.h"
 #include "PotionGameplayAbility.h"
 #include "TimerManager.h"
+#include "UObjectGlobals.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
 //////////////////////////////////////////////////////////////////////////
 // AGameJamCharacter
 
-AGameJamCharacter::AGameJamCharacter()
+AGameJamCharacter::AGameJamCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer
+		.SetDefaultSubobjectClass<UAlchemyMovementComponent>(ACharacter::CharacterMovementComponentName)
+	)
+/*
+AGASCharacter::AGASCharacter(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer
+.SetDefaultSubobjectClass<UGASCharacterMovementComponent>(ACharacter::CharacterMovementComponentName)
+)
+{*/
 {
+	
 	// Use only Yaw from the controller and ignore the rest of the rotation.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
@@ -60,7 +72,7 @@ AGameJamCharacter::AGameJamCharacter()
 	GetCharacterMovement()->AirControl = 0.80f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.0f;
-	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	//GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->MaxFlySpeed = 600.0f;
 
 	// Lock character motion onto the XZ plane, so the character can't move in or out of the screen
@@ -81,6 +93,12 @@ AGameJamCharacter::AGameJamCharacter()
 	// Enable replication on the Sprite component so animations show up when networked
 	GetSprite()->SetIsReplicated(true);
 	bReplicates = true;
+	//UDataTable* test = CreateDefaultSubobject<UDataTable>(FName("test"));
+	AttributeSet = CreateDefaultSubobject<UAlchemyAttributeSet>(FName("Attributes"));
+	//if (Attrs)
+	//{
+	//}
+	//AttributeSet = AbilitySystem->InitStats(AttributeSet, AbilitySystem);
 
 }
 
@@ -111,11 +129,6 @@ void AGameJamCharacter::UnlockAnimationSwitching()
 	LockAnimationSwitching = false;
 }
 
-void AGameJamCharacter::ChangeMoveSpeed(float Speed)
-{
-	GetCharacterMovement()->MaxWalkSpeed = Speed;
-}
-
 FVector2D AGameJamCharacter::GetRelativeLocationToPosition(FVector CheckAgainst)
 {
 	FVector MyLocation = GetActorLocation();
@@ -129,13 +142,17 @@ FVector2D AGameJamCharacter::GetRelativeLocationToPosition(FVector CheckAgainst)
 	return RelativeLocation;
 }
 
+void AGameJamCharacter::MoveAI(float Amount)
+{
+	MoveRight(Amount);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
 void AGameJamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	if (AbilitySystem)
 	{
 		if (HasAuthority())
@@ -147,12 +164,15 @@ void AGameJamCharacter::BeginPlay()
 				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, i));
 			}
 		}
-		/*
-		if (HasAuthority() && Ability)
-		{
-			AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, 0));
-		}*/
 		AbilitySystem->InitAbilityActorInfo(this, this);
+		const UAttributeSet * Attrs = AbilitySystem->InitStats(UAlchemyAttributeSet::StaticClass(), nullptr);
+
+		if (Attrs)
+		{
+			const UAlchemyAttributeSet* temp = Cast<UAlchemyAttributeSet>(Attrs);
+			AttributeSet = const_cast<UAlchemyAttributeSet*>(temp);
+			UE_LOG(LogTemp, Warning, TEXT("%s --> %f"), *GetName(), AttributeSet->MoveSpeed);
+		}
 	}
 
 }

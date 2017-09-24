@@ -6,6 +6,11 @@
 #include "AbilitySystemComponent.h"
 #include "GameJamCharacter.h"
 
+UAlchemyAttributeSet::UAlchemyAttributeSet()
+{
+	// DO NOT TOUCH GAME WILL BREAK WITHOUT THIS
+	MoveSpeed = 100.f;
+}
 
 void UAlchemyAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data)
 {

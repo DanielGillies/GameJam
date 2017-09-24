@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "AbilitySystemInterface.h"
+#include "AlchemyAttributeSet.h"
 #include "GameJamCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -94,7 +95,15 @@ protected:
 	// End of APawn interface
 
 public:
-	AGameJamCharacter();
+	AGameJamCharacter(const FObjectInitializer& ObjectInitializer);
+
+	UPROPERTY()
+	UAlchemyAttributeSet* AttributeSet;
+
+	virtual float GetMaxSpeed() const
+	{
+		return AttributeSet->MoveSpeed;
+	}
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
@@ -122,12 +131,9 @@ public:
 
 	bool LockAnimationSwitching = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float MoveSpeed = 500.f;
-
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void ChangeMoveSpeed(float Speed);
-
 	UFUNCTION(BlueprintCallable, Category = "Helper")
 	FVector2D GetRelativeLocationToPosition(FVector CheckAgainst);
+
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void MoveAI(float Amount);
 };

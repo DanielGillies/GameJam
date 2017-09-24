@@ -15,6 +15,8 @@ class GAMEJAM_API UAlchemyAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+	UAlchemyAttributeSet();
+
 	//Hitpoints
 	UPROPERTY(Category = "Character Attributes | Health", EditAnywhere, BlueprintReadWrite)
 	float Health;
