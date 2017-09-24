@@ -102,33 +102,38 @@ AGASCharacter::AGASCharacter(const FObjectInitializer& ObjectInitializer)
 
 }
 
-void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
+bool AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 {
 	int32 AbilityIndex = -1;
 	for (int i = 0; i < AbilityArray.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("---%s---"), *AbilityArray[i]->GetName());
 		if (!AbilityArray[i])
 		{
+			UE_LOG(LogTemp, Warning, TEXT("FOUND EMPTY-"));
 			AbilityIndex = i;
 			break;
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("%d"), AbilityArray.Num());
 	if (AbilityIndex != -1)
 	{
-		AbilityArray.Insert(Ability, AbilityIndex);
+		AbilityArray[AbilityIndex] = Ability;
+		AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex + StartingAbilities.Num()));
+		UE_LOG(LogTemp, Warning, TEXT("Added ability %d : key %d"), AbilityIndex + 1, AbilityIndex + StartingAbilities.Num());
+		return true;
+	}
+	else if (AbilityArray.Num() < 4)
+	{
+		AbilityIndex = AbilityArray.Add(Ability);
+		AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex + StartingAbilities.Num()));
+		AbilitySystem->DecrementAbilityListLock()
+		UE_LOG(LogTemp, Warning, TEXT("Added ability %d : key %d"), AbilityIndex + 1, AbilityIndex + StartingAbilities.Num());
+		return true;
 	}
 	else
 	{
-		AbilityIndex = AbilityArray.Add(Ability);
+		return false;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Added ability %d"), AbilityIndex+1);
-	//AbilityArray.insert
-	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex + StartingAbilities.Num()));
-	/*int32 AbilityIndex = UsableAbilities.Add(Ability);
-	UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Cast<UGameplayAbility>(Ability), FName("Ability"));
-	AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, AbilityIndex));
-	AbilitySystem->InitAbilityActorInfo(this, this);*/
 }
 
 void AGameJamCharacter::RemoveAbilityFromArray(UPotionGameplayAbility* Ability)
@@ -144,9 +149,12 @@ void AGameJamCharacter::RemoveAbilityFromArray(UPotionGameplayAbility* Ability)
 	}
 	if (AbilityIndex != -1)
 	{
-		AbilityArray.RemoveAt(AbilityIndex);
+		AbilityArray[AbilityIndex] = nullptr;
+		//AbilityArray.RemoveAt(AbilityIndex, 1, false);
 		AbilitySystem->ClearAbility(Ability->GetCurrentAbilitySpecHandle());
 		UE_LOG(LogTemp, Warning, TEXT("Removed ability %d"), AbilityIndex+1);
+		UE_LOG(LogTemp, Warning, TEXT("Num abilities %d"), AbilityArray.Num());
+
 	}
 	else
 	{
@@ -157,7 +165,7 @@ void AGameJamCharacter::RemoveAbilityFromArray(UPotionGameplayAbility* Ability)
 void AGameJamCharacter::RemoveRandomAbility()
 {
 	int32 index = FMath::RandRange(0, AbilityArray.Num()-1);
-	RemoveAbilityFromArray(AbilityArray[index]);
+	RemoveAbilityFromArray(AbilityArray[1]);
 }
 
 void AGameJamCharacter::PlayAttackAnimation()
@@ -194,6 +202,17 @@ FVector2D AGameJamCharacter::GetRelativeLocationToPosition(FVector CheckAgainst)
 void AGameJamCharacter::MoveAI(float Amount)
 {
 	MoveRight(Amount);
+}
+
+bool AGameJamCharacter::checkValidAbility(int index)
+{
+	if (index < AbilityArray.Num())
+	{
+		if (AbilityArray[index])
+			return true;
+	}
+	return false;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -257,7 +276,7 @@ void AGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("TestInput", IE_Released, this, &AGameJamCharacter::RemoveRandomAbility);
+	//PlayerInputComponent->BindAction("TestInput", IE_Released, this, &AGameJamCharacter::RemoveRandomAbility);
 
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamCharacter::MoveRight);
 

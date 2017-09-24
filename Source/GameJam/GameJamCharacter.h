@@ -117,7 +117,7 @@ public:
 	TArray < class UPotionGameplayAbility*> AbilityArray;
 
 	UFUNCTION(BlueprintCallable)
-	void AddAbilityToArray(UPotionGameplayAbility* Ability);
+	bool AddAbilityToArray(UPotionGameplayAbility* Ability);
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveAbilityFromArray(UPotionGameplayAbility* Ability);
@@ -143,4 +143,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void MoveAI(float Amount);
+
+	UFUNCTION(BlueprintCallable, Category = Utils)
+	bool checkValidAbility(int index);
 };
