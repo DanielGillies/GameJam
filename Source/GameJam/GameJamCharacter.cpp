@@ -113,7 +113,7 @@ void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 	AbilitySystem->InitAbilityActorInfo(this, this);*/
 }
 
-void AGameJamCharacter::SetupFire()
+void AGameJamCharacter::PlayAttackAnimation()
 {
 	if (!AttackAnimationLock)
 	{
@@ -123,7 +123,6 @@ void AGameJamCharacter::SetupFire()
 		GetSprite()->SetFlipbook(DesiredAnimation);
 
 		GetWorldTimerManager().SetTimer(AnimationLockHandle, this, &AGameJamCharacter::FinishAttackAnimation, GetSprite()->GetFlipbookLength());
-		this->Fire();
 	}
 }
 
@@ -241,7 +240,7 @@ void AGameJamCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const 
 void AGameJamCharacter::UpdateCharacter()
 {
 	// Update animation to match the motion
-	UE_LOG(LogTemp, Warning, TEXT("LOCKED BITCH"));
+	//UE_LOG(LogTemp, Warning, TEXT("LOCKED BITCH"));
 	if (!AttackAnimationLock)
 	{
 		UpdateAnimation();

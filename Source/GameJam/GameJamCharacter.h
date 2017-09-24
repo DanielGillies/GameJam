@@ -122,7 +122,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "DmgSystem")
 	void OnDeath();
 
-	void SetupFire();
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void PlayAttackAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Firing")
 	void Fire();
