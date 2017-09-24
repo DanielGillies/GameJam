@@ -127,9 +127,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Firing")
 	void Fire();
 
-	void UnlockAnimationSwitching();
+	void FinishAttackAnimation();
 
-	bool LockAnimationSwitching = false;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Animations")
+	bool AttackAnimationLock = false;
 
 	UFUNCTION(BlueprintCallable, Category = "Helper")
 	FVector2D GetRelativeLocationToPosition(FVector CheckAgainst);

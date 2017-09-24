@@ -115,18 +115,21 @@ void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 
 void AGameJamCharacter::SetupFire()
 {
-	FTimerHandle AnimationLockHandle;
-	LockAnimationSwitching = true;
-	UPaperFlipbook* DesiredAnimation = AttackAnimation;
-	GetSprite()->SetFlipbook(DesiredAnimation);
-	
-	GetWorldTimerManager().SetTimer(AnimationLockHandle, this, &AGameJamCharacter::UnlockAnimationSwitching, GetSprite()->GetFlipbookLength());
-	this->Fire();
+	if (!AttackAnimationLock)
+	{
+		FTimerHandle AnimationLockHandle;
+		AttackAnimationLock = true;
+		UPaperFlipbook* DesiredAnimation = AttackAnimation;
+		GetSprite()->SetFlipbook(DesiredAnimation);
+
+		GetWorldTimerManager().SetTimer(AnimationLockHandle, this, &AGameJamCharacter::FinishAttackAnimation, GetSprite()->GetFlipbookLength());
+		this->Fire();
+	}
 }
 
-void AGameJamCharacter::UnlockAnimationSwitching()
+void AGameJamCharacter::FinishAttackAnimation()
 {
-	LockAnimationSwitching = false;
+	AttackAnimationLock = false;
 }
 
 FVector2D AGameJamCharacter::GetRelativeLocationToPosition(FVector CheckAgainst)
@@ -157,11 +160,12 @@ void AGameJamCharacter::BeginPlay()
 	{
 		if (HasAuthority())
 		{
-			for (int i = 0; i < AbilityArray.Num(); i++)
+			for (int i = 0; i < StartingAbilities.Num(); i++)
 			{
 				TSubclassOf<UGameplayAbility> Ability = StartingAbilities[i];
-				UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Ability, FName("Ability"));
-				AbilitySystem->GiveAbility(FGameplayAbilitySpec(AbilityObject, 1, i));
+				//UGameplayAbility* AbilityObject = Cast<UGameplayAbility>(Ability->GetDefaultObject());
+					//NewObject<UGameplayAbility>(GetTransientPackage(), Ability, FName("Ability"));
+				AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 1, i));
 			}
 		}
 		AbilitySystem->InitAbilityActorInfo(this, this);
@@ -208,8 +212,6 @@ void AGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AGameJamCharacter::SetupFire);
-
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGameJamCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGameJamCharacter::TouchStopped);
 
@@ -239,7 +241,8 @@ void AGameJamCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const 
 void AGameJamCharacter::UpdateCharacter()
 {
 	// Update animation to match the motion
-	if (!LockAnimationSwitching)
+	UE_LOG(LogTemp, Warning, TEXT("LOCKED BITCH"));
+	if (!AttackAnimationLock)
 	{
 		UpdateAnimation();
 	}
