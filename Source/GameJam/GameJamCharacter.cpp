@@ -103,7 +103,7 @@ void AGameJamCharacter::SetupFire()
 	GetSprite()->SetFlipbook(DesiredAnimation);
 	
 	GetWorldTimerManager().SetTimer(AnimationLockHandle, this, &AGameJamCharacter::UnlockAnimationSwitching, GetSprite()->GetFlipbookLength());
-	Fire();
+	this->Fire();
 }
 
 void AGameJamCharacter::UnlockAnimationSwitching()
