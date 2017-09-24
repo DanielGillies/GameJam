@@ -4,6 +4,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Math/Vector.h"
+#include "PaperSpriteComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -16,6 +17,9 @@ AProjectile::AProjectile()
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"), TEXT("ProjectileComp"));
 	MovementComp->UpdatedComponent = CollisionComp;
+
+	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(FName("Sprite Component"), TEXT("SpriteComp"));
+	Sprite->AttachToComponent(CollisionComp, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -32,9 +36,9 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-void AProjectile::LaunchProjectile()
+void AProjectile::LaunchProjectile(FVector Direciton)
 {
-	FVector velocity = FVector(5, 0, 0) * MovementComp->InitialSpeed;
+	FVector velocity = Direciton * MovementComp->InitialSpeed;
 	MovementComp->Activate();
 }
 
