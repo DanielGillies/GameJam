@@ -105,7 +105,7 @@ AGASCharacter::AGASCharacter(const FObjectInitializer& ObjectInitializer)
 void AGameJamCharacter::AddAbilityToArray(UPotionGameplayAbility* Ability)
 {
 	int32 AbilityIndex = AbilityArray.Add(Ability);
-	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex));
+	AbilitySystem->GiveAbility(FGameplayAbilitySpec(Ability, 1, AbilityIndex + StartingAbilities.Num()));
 	AbilitySystem->InitAbilityActorInfo(this, this);
 	/*int32 AbilityIndex = UsableAbilities.Add(Ability);
 	UGameplayAbility* AbilityObject = NewObject<UGameplayAbility>(GetTransientPackage(), Cast<UGameplayAbility>(Ability), FName("Ability"));
